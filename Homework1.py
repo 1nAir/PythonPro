@@ -15,11 +15,6 @@ class Market:
         return f'{self.price} {self.desc} {self.dim}.'
 
 
-boots1 = Market(5,'Сандали','4x10')
-boots2 = Market(8,'Кроссовки','5x10')
-print(boots1, boots2, sep='\n')
-
-
 ### Exercise 2 ###
 class Customer:
     """
@@ -39,46 +34,32 @@ class Customer:
         return f'{self.first_name} {self.last_name} {self.phone} {self.birthday}.'
 
 
-customer1 = Customer('Anatoliy','Vlasov','+38(096)555-22-31','13.04.1999')
-customer2 = Customer('Evgeniy','Onegim','+38(066)666-22-31','13.07.1666')
-print(customer1, customer2, sep='\n')
-
-
 ### Exercise 3 ###
 class Order:
-    """
-    Desc:
-        __init__ args:
-            First arg = First name
-            Second arg = Last name
-            Third arg = Phone number
-            fourth arg = Birthday
-        add_item args:
-            First arg = product
-            Second arg = price
-    """
-    def __init__(self, first_name, last_name, phone, address):
-        self.first_name = first_name
-        self.last_name = last_name
-        self.phone = phone
-        self.address = address
+    def __init__(self, customer: Customer, products=None):
+        self.customer = customer
+        self.products = products
 
-        self.order = []
-        self.summ = 0
-
-    def add_item(self, product, price):
-        self.order.append(product)
-        self.summ += price
+    def add_item(self):
+        s = 0
+        for item in self.products:
+            s += item.price
+        return s
 
     def __str__(self):
-        return f"Items: {', '.join(self.order)}" \
-               f"\ntotal cost: {self.summ} UAH" \
-               f"\nAddress: {self.address}" \
-               f"\nName: {self.first_name} {self.last_name}"\
-               f"\nPhone: {self.phone}"
+        res = '\n'.join(map(str, self.products))
+        return f'{self.customer}\n{res}\nTotal price: {self.add_item()} UAH'
 
 
-client1 = Order("Anatoliy", "Vlasov", "+38(096)555-22-31", "Mayakovskogo 5, kv104")
-client1.add_item("pizza", 300)
-client1.add_item("burger", 150)
-print(client1)
+if __name__ == '__main__':
+    x = Market(5, 'apple', '1x1')
+    y = Market(7, 'banana', '2x2')
+    z = Market(9, 'orange', '3x3')
+
+    customer_1 = Customer('Vlad', 'Vasev', '555-44-55', '13-04-1945')
+    customer_2 = Customer('Evgeniy', 'Jukov', '444-11-22', '21-08-1962')
+
+    order_1 = Order(customer_1, [x, z, x])
+    order_2 = Order(customer_2, [x, x, x, z, y])
+
+    print(order_1, order_2, sep='\n')
